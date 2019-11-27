@@ -20,6 +20,10 @@
             Console.WriteLine(pizzaCost.GetDeliveryCost(4));
             Console.WriteLine(pizzaCost.GetCostToMake(2.5));
 
+            pizza.RemoveRole<PepperoniDecorator>();
+
+            Console.WriteLine(pizza.GetDescription());
+            Console.WriteLine(pizza.GetSellingCost());
 
             Console.ReadKey();
         }

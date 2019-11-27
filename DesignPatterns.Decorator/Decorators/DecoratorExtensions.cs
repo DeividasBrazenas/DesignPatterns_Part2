@@ -28,7 +28,7 @@
                     return decorator;
                 case PizzaDecorator decorator:
                     if (decorator.Pizza is PizzaDecorator)
-                        decorator.Pizza = RemoveRole<T>(component);
+                        decorator.Pizza = decorator.Pizza.RemoveRole<T>();
                     return decorator;
                 default:
                     return null;
