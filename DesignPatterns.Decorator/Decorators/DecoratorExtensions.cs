@@ -4,13 +4,35 @@
 
     public static class DecoratorExtensions
     {
-        public static T GetRole<T>(this IPizza pizza)
+        public static T GetRole<T>(this IPizza component) where T : PizzaDecorator
         {
-            if (pizza.GetType().BaseType != typeof(PizzaDecorator)) return default;
+            switch (component)
+            {
+                case T requested:
+                    return requested;
+                case PizzaDecorator anotherDecorator:
+                    return GetRole<T>(anotherDecorator.Pizza);
+                default:
+                    return null;
+            }
+        }
 
-            if (pizza.GetType() == typeof(T)) return (T) pizza;
-
-            return ((PizzaDecorator) pizza).Pizza.GetRole<T>();
+        public static PizzaDecorator RemoveRole<T>(this IPizza component) where T : PizzaDecorator
+        {
+            switch (component)
+            {
+                case T toRemove:
+                    return toRemove.Pizza as PizzaDecorator;
+                case PizzaDecorator decorator when decorator.Pizza is T toRemove:
+                    decorator.Pizza = toRemove.Pizza;
+                    return decorator;
+                case PizzaDecorator decorator:
+                    if (decorator.Pizza is PizzaDecorator)
+                        decorator.Pizza = RemoveRole<T>(component);
+                    return decorator;
+                default:
+                    return null;
+            }
         }
     }
 }
